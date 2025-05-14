@@ -3,6 +3,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import openai
+from openai import OpenAI
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -10,7 +11,9 @@ load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if not OPENAI_API_KEY:
     raise RuntimeError("OPENAI_API_KEY not set in environment variables.")
-openai.api_key = OPENAI_API_KEY
+
+# Use the new OpenAI client
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 app = FastAPI()
 
@@ -109,11 +112,11 @@ async def generate(request: GenerateRequest):
         prompt = f"Generate content for tool '{request.tool}': {request.input}"
         max_tokens = 100
     try:
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": prompt}],
             max_tokens=max_tokens,
-            temperature=0.7,
+            temperature=0.7
         )
         content = response.choices[0].message.content.strip()
         # Fallback for empty or irrelevant video idea generator responses
