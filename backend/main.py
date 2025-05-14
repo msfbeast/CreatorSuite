@@ -37,24 +37,14 @@ class GenerateRequest(BaseModel):
 from fastapi import Request
 
 @app.post("/generate")
-async def generate(request: Request):
+async def generate(request_data: GenerateRequest, request: Request):
     import sys
     body = await request.body()
     print("REQUEST BODY:", body, file=sys.stderr)
-    try:
-        data = await request.json()
-        print("PARSED JSON:", data, file=sys.stderr)
-    except Exception as e:
-        print("JSON decode error:", str(e), file=sys.stderr)
-        return {"error": f"JSON decode error: {str(e)}"}
-    try:
-        request_data = GenerateRequest(**data)
-    except Exception as e:
-        print("Model parse error:", str(e), file=sys.stderr)
-        return {"error": f"Model parse error: {str(e)}", "received": data}
+    print("PARSED JSON:", request_data.dict(), file=sys.stderr)
     prompt = ""
     tool = request_data.tool.lower()
-    # ... (rest of your endpoint logic, replace all 'request.' with 'request_data.')
+    # ... (rest of your endpoint logic, use request_data instead of request)
     prompt = ""
     tool = request.tool.lower()
     if tool == "video idea generator":
