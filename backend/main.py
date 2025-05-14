@@ -46,24 +46,24 @@ async def generate(request_data: GenerateRequest, request: Request):
     tool = request_data.tool.lower()
     # ... (rest of your endpoint logic, use request_data instead of request)
     prompt = ""
-    tool = request.tool.lower()
+    tool = request_data.tool.lower()
     if tool == "video idea generator":
         prompt = (
-            f"Generate 10 unique, SEO-optimized YouTube video ideas for: {request.input}. "
+            f"Generate 10 unique, SEO-optimized YouTube video ideas for: {request_data.input}. "
             f"Ideas should be tailored for YouTube, use catchy and search-friendly titles, and avoid repeating topics or phrasing. "
             f"Format the response as a numbered list, with each idea on a new line."
         )
         max_tokens = 400
     elif tool == "metadata generator":
         prompt = (
-            f"Generate YouTube metadata for: {request.input}.\n"
+            f"Generate YouTube metadata for: {request_data.input}.\n"
             f"Return a JSON object with two fields: titles (an array of 10 unique, SEO-optimized YouTube titles, each catchy and search-friendly, with no repetition), and description (an engaging, SEO-friendly video description).\n"
             f"Example: {{ \"titles\": [\"Title 1\", \"Title 2\", ..., \"Title 10\"], \"description\": \"SEO-friendly description...\" }}"
         )
         max_tokens = 600
     elif tool == "link shortener":
         import requests
-        url = request.input.strip()
+        url = request_data.input.strip()
         if not url.startswith("http"):
             return {"error": "Input must be a valid URL starting with http or https."}
         try:
