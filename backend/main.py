@@ -85,7 +85,7 @@ async def generate(request: GenerateRequest):
         )
         max_tokens = 250
         try:
-            response = openai.ChatCompletion.create(
+            response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": prompt}],
                 max_tokens=max_tokens,
