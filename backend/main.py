@@ -84,7 +84,7 @@ async def generate(request_data: GenerateRequest, request: Request):
         max_tokens = 250
     elif tool == "tag generator":
         # Combine topic and description for richer prompt context
-        topic_desc = request.input
+        topic_desc = request_data.input
         if hasattr(request, 'description') and request.description:
             topic_desc += f". {request.description}"
         # Use a single, clear, RapidTags-like prompt and one strong example
