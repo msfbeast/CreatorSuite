@@ -13,11 +13,13 @@ const Shorten = () => {
   const [error, setError] = useState<string | null>(null);
 
   const shortenLink = async () => {
+    const apiUrl = import.meta.env.VITE_API_URL;
     setLoading(true);
     setError(null);
     setResult(null);
     try {
-      const response = await fetch('http://localhost:8000/generate', {
+      const apiUrl = import.meta.env.VITE_API_URL;
+    const response = await fetch(`${apiUrl}/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tool: 'link shortener', input: url })

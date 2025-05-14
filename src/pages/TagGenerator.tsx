@@ -15,10 +15,12 @@ const TagGenerator = () => {
   const [tags, setTags] = useState<string | null>(null);
 
   const generateTags = async () => {
+    const apiUrl = import.meta.env.VITE_API_URL;
     setLoading(true);
     setTags(null);
     try {
-      const response = await fetch("http://localhost:8000/generate", {
+      const apiUrl = import.meta.env.VITE_API_URL;
+    const response = await fetch(`${apiUrl}/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
