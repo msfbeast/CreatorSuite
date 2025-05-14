@@ -34,8 +34,27 @@ class GenerateRequest(BaseModel):
     affiliate_link: str = ""
     tag: str = ""  # Optional tag for affiliate generator
 
+from fastapi import Request
+
 @app.post("/generate")
-async def generate(request: GenerateRequest):
+async def generate(request: Request):
+    import sys
+    body = await request.body()
+    print("REQUEST BODY:", body, file=sys.stderr)
+    try:
+        data = await request.json()
+        print("PARSED JSON:", data, file=sys.stderr)
+    except Exception as e:
+        print("JSON decode error:", str(e), file=sys.stderr)
+        return {"error": f"JSON decode error: {str(e)}"}
+    try:
+        request_data = GenerateRequest(**data)
+    except Exception as e:
+        print("Model parse error:", str(e), file=sys.stderr)
+        return {"error": f"Model parse error: {str(e)}", "received": data}
+    prompt = ""
+    tool = request_data.tool.lower()
+    # ... (rest of your endpoint logic, replace all 'request.' with 'request_data.')
     prompt = ""
     tool = request.tool.lower()
     if tool == "video idea generator":
